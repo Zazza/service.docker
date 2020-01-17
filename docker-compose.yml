@@ -1,0 +1,49 @@
+version: '2.0'
+
+services:
+    service-nginx:
+        image: "nginx:latest"
+        depends_on:
+            - service-php
+        container_name: "service-nginx"
+        ports:
+                - "80:80"
+        volumes:
+            - "./data/logs:/var/log"
+            - "${VHOSTS}:/home/vhosts"
+            - "./containers/nginx/config:/etc/nginx/conf.d"
+
+    service-postgres:
+        image: postgres:12.1
+        ports:
+            - 5432:5432
+        volumes:
+
+        container_name: "service-postgres"
+        environment:
+            - POSTGRES_USER=service
+            - POSTGRES_PASSWORD=service
+            - POSTGRES_DB=service
+#        expose:
+#            - "5432"
+        volumes:
+            - "${VHOSTS}:/home/vhosts"
+            - ./data/pgsql:/var/lib/postgresql/data
+
+    service-php:
+        build:
+            context: ./containers/php
+        container_name: "service-php"
+        expose:
+            - "9000"
+            - "9001"
+        ports: 
+            - "8080:8080"
+            - "8081:8081"
+        extra_hosts:
+            - "${URL_1_SITE}:${HOST_IP}"
+            - "${URL_2_SITE}:${HOST_IP}"
+
+        volumes:
+            - "./data/logs/php:/var/log/php"
+            - "${VHOSTS}:/home/vhosts"

@@ -1,0 +1,5 @@
+data/logs/nginx/*
+!data/logs/nginx/.empty
+data/pgsql/*
+!data/pgsql/.empty
+.env
