@@ -20,8 +20,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     gnupg2 \
     g++ \
     ca-certificates
-    
-RUN curl -s "https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh" | bash    
 
 RUN LC_ALL=en_US.UTF-8 apt-add-repository -y ppa:ondrej/php \
     && apt-get clean -y \
@@ -43,7 +41,7 @@ RUN LC_ALL=en_US.UTF-8 apt-add-repository -y ppa:ondrej/php \
     php7.3-amqp \
     php7.3-bcmath \
     php7.3-gmp \
-    php7.3-mysqli \
+    php7.3-pgsql \
     php-imagick \
     php-xdebug \
     
@@ -53,9 +51,6 @@ RUN LC_ALL=en_US.UTF-8 apt-add-repository -y ppa:ondrej/php \
 
 
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install composer
-#RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY ./config/cgi/php.ini /etc/php/7.3/cgi/php.ini
 COPY ./config/fpm/php.ini /etc/php/7.3/fpm/php.ini
